@@ -3,7 +3,7 @@
   <p><strong>Shared tool budgets for OpenCode 2, Codex, and Pi—with an Orca control panel.</strong></p>
 
   <p>
-    <a href="https://github.com/wzasd/HarnessPro/tree/v0.2.0"><img alt="Release" src="https://img.shields.io/badge/release-v0.2.0-blue" /></a>
+    <a href="https://github.com/wzasd/HarnessPro/tree/v0.2.1"><img alt="Release" src="https://img.shields.io/badge/release-v0.2.1-blue" /></a>
     <a href="https://github.com/wzasd/HarnessPro/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-green" /></a>
     <img alt="Orca" src="https://img.shields.io/badge/Orca-%3E%3D1.4.0-6f42c1" />
   </p>
@@ -106,7 +106,7 @@ The current router uses deterministic keywords. Empty task descriptions default 
 
 ## Run checks from Orca
 
-Use the panel buttons, or type:
+Use `Ctrl + Alt + R`, or type:
 
 ```bash
 harnesspro checks start
@@ -132,6 +132,8 @@ harnesspro evolve stop
 ```
 
 The coordinator uses four Orca workers: test synthesizer, trajectory analyzer, evolution planner, and harness editor. Candidates then run real Codex evaluations against fixed tests. The report includes pass rate, latency, and token cost, with no invented dollar estimate.
+
+No terminal is required. Use `Ctrl + Alt + E` to start, `Ctrl + Alt + S` to inspect status, and `Ctrl + Alt + X` to stop. The panel shows these shortcuts and links the apply command.
 
 When the status becomes `awaiting-approval`, review the report and apply a profile explicitly:
 
@@ -195,7 +197,7 @@ The paper uses Lite, Medium, and Heavy for performance–cost operating points. 
 4. Install `harnesspro.orca` and review its capabilities.
 5. Enable the plugin.
 
-The marketplace index currently points to `v0.2.0`.
+The marketplace index currently points to `v0.2.1`.
 
 ## Updates
 

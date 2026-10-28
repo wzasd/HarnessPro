@@ -75,6 +75,7 @@ export default function activate(orca) {
   orca.commands.register("start-evolution", async () => {
     const state = callEvolution("start");
     watchEvolution(orca);
+    await orca.host.call("notifications.show", { title: "HarnessPro 进化", body: "进化已在后台启动。" });
     return state;
   });
   orca.commands.register("stop-evolution", async () => {
@@ -82,7 +83,14 @@ export default function activate(orca) {
     watchEvolution(orca);
     return state;
   });
-  orca.commands.register("status-evolution", async () => callEvolution("status"));
+  orca.commands.register("status-evolution", async () => {
+    const state = callEvolution("status");
+    await orca.host.call("notifications.show", {
+      title: "HarnessPro 进化状态",
+      body: `状态：${state.status}；阶段：${state.stage || "无"}`,
+    });
+    return state;
+  });
   orca.commands.register("apply-evolution", async () => {
     const state = callEvolution("apply", "medium");
     await orca.host.call("notifications.show", { title: "HarnessPro 进化", body: "已采用 Medium 候选策略。" });

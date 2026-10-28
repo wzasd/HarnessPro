@@ -99,7 +99,7 @@ harnesspro auto --task "Debug a production race condition" opencode2 --standalon
 
 ## Orca からチェックを実行する
 
-パネルのボタン、または次のコマンドを使用します。
+`Ctrl + Alt + R`、または次のコマンドを使用します。
 
 ```bash
 harnesspro checks start
@@ -125,6 +125,8 @@ harnesspro evolve stop
 ```
 
 コーディネーターは、テスト合成、軌跡分析、進化計画、Harness 編集の 4 つの Orca worker を使用します。各候補は固定テスト付きの実際の Codex 評価も実行します。レポートには成功率、レイテンシ、トークンコストを含め、ドル推定は行いません。
+
+ターミナルを開く必要はありません。`Ctrl + Alt + E` で開始、`Ctrl + Alt + S` で状態表示、`Ctrl + Alt + X` で停止します。パネルにはこれらのショートカットと候補の適用コマンドが表示されます。
 
 ステータスが `awaiting-approval` になったら、レポートを確認し、プロファイルを明示的に選択します。
 
@@ -188,7 +190,7 @@ flowchart LR
 4. `harnesspro.orca` をインストールし、権限を確認します。
 5. プラグインを有効にします。
 
-Marketplace インデックスは現在 `v0.2.0` を指しています。
+Marketplace インデックスは現在 `v0.2.1` を指しています。
 
 ## 更新
 
