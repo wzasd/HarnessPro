@@ -3,7 +3,7 @@
   <p><strong>Shared tool budgets for OpenCode 2, Codex, and Pi—with an Orca control panel.</strong></p>
 
   <p>
-    <a href="https://github.com/wzasd/HarnessPro/tree/v0.2.1"><img alt="Release" src="https://img.shields.io/badge/release-v0.2.1-blue" /></a>
+    <a href="https://github.com/wzasd/HarnessPro/tree/v0.2.2"><img alt="Release" src="https://img.shields.io/badge/release-v0.2.2-blue" /></a>
     <a href="https://github.com/wzasd/HarnessPro/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-green" /></a>
     <img alt="Orca" src="https://img.shields.io/badge/Orca-%3E%3D1.4.0-6f42c1" />
   </p>
@@ -197,7 +197,7 @@ The paper uses Lite, Medium, and Heavy for performance–cost operating points. 
 4. Install `harnesspro.orca` and review its capabilities.
 5. Enable the plugin.
 
-The marketplace index currently points to `v0.2.1`.
+The marketplace index currently points to `v0.2.2`.
 
 ## Updates
 

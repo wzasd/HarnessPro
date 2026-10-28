@@ -113,7 +113,13 @@ function waitForWorker(runId, dispatchId) {
   orcaJson(["worker-release", "--dispatch", dispatchId]);
   orcaJson(["check", "--run", runId, "--ack", delivery.deliveryId]);
   if (!outcome) throw new Error("Worker finished without a valid worker_done");
-  if (outcome !== "succeeded") throw new Error(`Worker reported ${outcome}`);
+  if (outcome !== "succeeded") {
+    const read = orcaJson(["worker-read", "--dispatch", dispatchId, "--limit", "20"]);
+    const messages = read.transcript?.messages || [];
+    const last = messages.at(-1);
+    const detail = (last?.blocks || []).map((block) => block.text || block.output || "").filter(Boolean).join("\n").slice(-1000);
+    throw new Error(`Worker reported ${outcome}${detail ? `: ${detail}` : ""}`);
+  }
 }
 
 function runWorker(runId, role, spec) {
@@ -190,7 +196,7 @@ async function runEvolution() {
     `Create unittest files ${path.join(testsDir, "test_add.py")} and ${path.join(testsDir, "test_subtract.py")}.`,
     `For ${tasks.training.prompt}, write 3 independent tests for add(a, b).`,
     `For ${tasks.validation.prompt}, write 3 independent tests for subtract(a, b).`,
-    "Use only the task descriptions as requirements. Run the tests serially and keep them fixed.",
+    "Use only the task descriptions as requirements. Do not run the tests before an implementation exists; keep the tests fixed for later candidate evaluation.",
     "Do not create add.py, subtract.py, or any implementation files outside the tests directory.",
   ].join(" "));
 

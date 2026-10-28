@@ -3,7 +3,7 @@
   "id": "orca",
   "publisher": "harnesspro",
   "name": "HarnessPro",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Run shared agent-budget checks and inspect their status from Orca.",
   "engines": { "orca": ">=1.4.0" },
   "pluginApi": 1,

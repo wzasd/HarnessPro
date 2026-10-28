@@ -190,7 +190,7 @@ flowchart LR
 4. 安装 `harnesspro.orca` 并查看权限说明。
 5. 启用插件。
 
-Marketplace 当前指向 `v0.2.1`。
+Marketplace 当前指向 `v0.2.2`。
 
 ## 更新
 

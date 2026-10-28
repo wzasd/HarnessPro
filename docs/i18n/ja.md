@@ -190,7 +190,7 @@ flowchart LR
 4. `harnesspro.orca` をインストールし、権限を確認します。
 5. プラグインを有効にします。
 
-Marketplace インデックスは現在 `v0.2.1` を指しています。
+Marketplace インデックスは現在 `v0.2.2` を指しています。
 
 ## 更新
 
