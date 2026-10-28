@@ -51,8 +51,8 @@ HarnessPro 给这 3 个 Agent 设置同一套预算。接近上限时，HarnessP
    ```
 
 3. 打开 Orca 的“设置 → Plugins”。
-4. 刷新插件列表并查看权限说明。
-5. 启用 HarnessPro。
+4. 选择“从本地路径安装”，再选择当前项目目录。
+5. 查看权限说明并启用 HarnessPro。
 
 安装脚本会备份已有文件，再创建符号链接。备份后缀为 `.backup-before-project` 和 `.backup-before-harnesspro-project`。
 

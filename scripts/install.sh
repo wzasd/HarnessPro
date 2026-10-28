@@ -22,4 +22,5 @@ link_source "$root/adapters/opencode" "$HOME/.config/opencode/plugins/harness-bu
 link_source "$root/adapters/pi/harnesspro.js" "$HOME/.pi/agent/extensions/harnesspro.js"
 link_source "$root/bin/harnesspro" "$HOME/.local/bin/harnesspro"
 node "$root/scripts/register.mjs"
-printf 'HarnessPro linked from %s\n' "$root"
+printf 'HarnessPro adapters linked from %s\n' "$root"
+printf 'In Orca Plugins, install HarnessPro from this local path: %s\n' "$root"

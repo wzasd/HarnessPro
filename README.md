@@ -58,8 +58,8 @@ The short version: **less wandering, more finishing.**
    ```
 
 3. Open **Settings → Plugins** in Orca.
-4. Refresh the plugin list and review the requested capabilities.
-5. Enable HarnessPro.
+4. Choose **Install from local path** and select this project directory.
+5. Review the requested capabilities and enable HarnessPro.
 
 The installer backs up existing files before creating symlinks. Backup suffixes are `.backup-before-project` and `.backup-before-harnesspro-project`.
 
