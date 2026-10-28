@@ -3,7 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const home = os.homedir();
+const home = process.env.HARNESSPRO_HOME || os.homedir();
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 function update(file, mutate) {
@@ -36,7 +36,16 @@ update(codexHooks, (value) => {
   const command = `python3 "${path.join(home, ".config", "harnesspro", "adapters", "codex_hook.py")}"`;
   for (const event of ["PreToolUse", "PostToolUse"]) {
     value.hooks[event] ||= [];
-    if (value.hooks[event].some((group) => JSON.stringify(group).includes("harnesspro/codex_hook.py"))) continue;
-    value.hooks[event].unshift({ hooks: [{ type: "command", command, timeout: 5 }] });
+    let registered = false;
+    for (const group of value.hooks[event]) {
+      for (const hook of group.hooks || []) {
+        if (hook.command?.includes("harnesspro/codex_hook.py") || hook.command?.includes("harnesspro/adapters/codex_hook.py")) {
+          hook.command = command;
+          hook.timeout = 5;
+          registered = true;
+        }
+      }
+    }
+    if (!registered) value.hooks[event].unshift({ hooks: [{ type: "command", command, timeout: 5 }] });
   }
 });
