@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      body { margin: 0; padding: 12px; font: 13px system-ui, sans-serif; color: var(--foreground, #ddd); background: var(--background, transparent); }
+      h1 { margin: 0 0 8px; font-size: 15px; }
+      p { line-height: 1.5; }
+      select, button { box-sizing: border-box; width: 100%; margin: 5px 0; padding: 7px 9px; border: 1px solid var(--border, #555); border-radius: 6px; font: inherit; }
+      button { background: var(--secondary, #2a2a2a); color: var(--foreground, #ddd); cursor: pointer; }
+      #status { min-height: 2.8em; color: var(--muted-foreground, #999); white-space: pre-wrap; }
+    </style>
+  </head>
+  <body>
+    <h1>HarnessPro</h1>
+    <p>共享预算检查在独立进程中运行。关闭面板不会停止检查。</p>
+    <select id="terminals" aria-label="选择终端"></select>
+    <button id="run">运行检查</button>
+    <button id="status">查看状态</button>
+    <button id="stop">停止检查</button>
+    <p id="status-text">正在读取终端…</p>
+    <script>
+      'use strict'
+      var seq = 0
+      var pending = new Map()
+      var terminals = document.getElementById('terminals')
+      var statusText = document.getElementById('status-text')
+
+      function call(action, params) {
+        return new Promise(function (resolve) {
+          var requestId = 'req-' + ++seq
+          pending.set(requestId, resolve)
+          window.parent.postMessage({ type: 'orca-panel-action', requestId: requestId, action: action, params: params }, '*')
+        })
+      }
+
+      window.addEventListener('message', function (event) {
+        var data = event.data
+        if (event.source !== window.parent || !data || data.type !== 'orca-panel-action-result') return
+        var resolve = pending.get(data.requestId)
+        if (!resolve) return
+        pending.delete(data.requestId)
+        resolve(data)
+      })
+
+      function refresh() {
+        return call('workspace.readContext').then(function (result) {
+          terminals.innerHTML = ''
+          if (!result.ok) {
+            statusText.textContent = '读取终端失败。请重新打开面板后重试。'
+            return
+          }
+          var values = result.value ? result.value.terminals : []
+          values.forEach(function (terminal) {
+            var option = document.createElement('option')
+            option.value = terminal.id
+            option.textContent = terminal.id
+            terminals.appendChild(option)
+          })
+          statusText.textContent = values.length ? '命令结果将在所选终端显示。' : '当前工作区没有可用终端。请先打开终端。'
+        })
+      }
+
+      function send(command) {
+        if (!terminals.value) {
+          statusText.textContent = '请先选择终端。'
+          return
+        }
+        call('terminal.sendText', { terminalId: terminals.value, text: command, enter: true }).then(function (result) {
+          statusText.textContent = result.ok && result.value.accepted ? '命令已发送。请在终端查看结果。' : '发送失败。请检查终端后重试。'
+        })
+      }
+
+      document.getElementById('run').addEventListener('click', function () { send('harnesspro checks start') })
+      document.getElementById('status').addEventListener('click', function () { send('harnesspro checks status') })
+      document.getElementById('stop').addEventListener('click', function () { send('harnesspro checks stop') })
+      refresh()
+    </script>
+  </body>
+</html>

@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "profiles": {
+    "lite": { "economy": 8, "converge": 14, "max": 22 },
+    "medium": { "economy": 14, "converge": 26, "max": 44 },
+    "heavy": { "economy": 20, "converge": 36, "max": 60 }
+  }
+}

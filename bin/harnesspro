@@ -1,0 +1,23 @@
+#!/bin/sh
+script_path=$(readlink -f "$0")
+project_root=$(CDPATH= cd -- "$(dirname -- "$script_path")/.." && pwd)
+if [ "$1" = checks ]; then
+  shift
+  exec node "$project_root/coordinator.mjs" "$@"
+fi
+if [ "$#" -lt 2 ]; then
+  echo "Usage: harnesspro <off|lite|medium|heavy> <agent> [args...]" >&2
+  exit 64
+fi
+case "$1" in
+  off|lite|medium|heavy) profile=$1 ;;
+  *) echo "Unknown HarnessPro profile: $1" >&2; exit 64 ;;
+esac
+shift
+if [ "$profile" = off ]; then
+  unset HARNESSPRO_PROFILE
+else
+  HARNESSPRO_PROFILE=$profile
+  export HARNESSPRO_PROFILE
+fi
+exec "$@"
