@@ -5,6 +5,39 @@ if [ "$1" = checks ]; then
   shift
   exec node "$project_root/coordinator.mjs" "$@"
 fi
+if [ "$1" = evolve ]; then
+  shift
+  action=$1
+  shift
+  exec node "$project_root/evolution.mjs" "$action" "$@"
+fi
+if [ "$1" = auto ]; then
+  shift
+  task=
+  if [ "$1" = --task ]; then
+    task=$2
+    shift 2
+  fi
+  if [ "$#" -lt 1 ]; then
+    echo "Usage: harnesspro auto [--task text] <opencode2|codex|pi> [args...]" >&2
+    exit 64
+  fi
+  agent=$1
+  shift
+  route=$(node "$project_root/router.mjs" "$agent" "$task") || exit $?
+  profile=$(printf '%s\n' "$route" | awk 'NR == 1')
+  model=$(printf '%s\n' "$route" | awk 'NR == 2')
+  effort=$(printf '%s\n' "$route" | awk 'NR == 3')
+  HARNESSPRO_PROFILE=$profile
+  export HARNESSPRO_PROFILE
+  case "$agent" in
+    opencode|opencode2) set -- --model "$model" "$@" ;;
+    codex) set -- -m "$model" -c "model_reasoning_effort=$effort" "$@" ;;
+    pi) set -- --model "$model" --thinking "$effort" "$@" ;;
+    *) echo "Unsupported HarnessPro agent: $agent" >&2; exit 64 ;;
+  esac
+  exec "$agent" "$@"
+fi
 if [ "$#" -lt 2 ]; then
   echo "Usage: harnesspro <off|lite|medium|heavy> <agent> [args...]" >&2
   exit 64

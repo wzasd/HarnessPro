@@ -3,7 +3,7 @@
   "id": "orca",
   "publisher": "harnesspro",
   "name": "HarnessPro",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Run shared agent-budget checks and inspect their status from Orca.",
   "engines": { "orca": ">=1.4.0" },
   "pluginApi": 1,
@@ -15,7 +15,11 @@
     "commands": [
       { "id": "run-checks", "title": "HarnessPro: Run checks", "context": "worktree" },
       { "id": "stop-checks", "title": "HarnessPro: Stop checks", "context": "worktree" },
-      { "id": "status-checks", "title": "HarnessPro: Show check status", "context": "worktree" }
+      { "id": "status-checks", "title": "HarnessPro: Show check status", "context": "worktree" },
+      { "id": "start-evolution", "title": "HarnessPro: Start evolution", "context": "worktree" },
+      { "id": "stop-evolution", "title": "HarnessPro: Stop evolution", "context": "worktree" },
+      { "id": "status-evolution", "title": "HarnessPro: Show evolution status", "context": "worktree" },
+      { "id": "apply-evolution", "title": "HarnessPro: Apply medium candidate", "context": "worktree" }
     ]
   },
   "capabilities": [

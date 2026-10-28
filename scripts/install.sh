@@ -17,9 +17,24 @@ link_source() {
   ln -s "$source" "$target"
 }
 
+write_pi_entry() {
+  source=$1
+  target=$2
+  desired="export { default } from \"$source\";"
+  if [ -f "$target" ] && [ ! -L "$target" ] && [ "$(cat "$target")" = "$desired" ]; then
+    return
+  fi
+  mkdir -p "$(dirname -- "$target")"
+  rm -rf "$target"
+  printf '%s\n' "$desired" > "$target"
+}
+
 link_source "$root" "$HOME/.config/harnesspro"
 link_source "$root/adapters/opencode" "$HOME/.config/opencode/plugins/harness-budget"
-link_source "$root/adapters/pi/harnesspro.js" "$HOME/.pi/agent/extensions/harnesspro.js"
+# pi resolves extension-relative imports against the given path, so a symlinked
+# entry breaks the adapter's "../../core.mjs" import. Generate a real file that
+# re-exports the adapter from its absolute repository path instead.
+write_pi_entry "$root/adapters/pi/harnesspro.js" "$HOME/.pi/agent/extensions/harnesspro.js"
 link_source "$root/bin/harnesspro" "$HOME/.local/bin/harnesspro"
 node "$root/scripts/register.mjs"
 printf 'HarnessPro adapters linked from %s\n' "$root"

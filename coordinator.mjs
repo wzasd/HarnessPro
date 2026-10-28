@@ -69,7 +69,7 @@ function stop() {
 async function run() {
   const home = os.homedir();
   const command = process.env.HARNESSPRO_CHECK_COMMAND || [
-    `node --test "${home}/.config/harnesspro/core.test.mjs" "${home}/.config/opencode/plugins/harness-budget/test.js" "${home}/.config/harnesspro/pi-extension.test.mjs" "${home}/.config/harnesspro/launcher.test.mjs"`,
+    `node --test "${home}/.config/harnesspro/core.test.mjs" "${home}/.config/harnesspro/router.test.mjs" "${home}/.config/harnesspro/evolution-core.test.mjs" "${home}/.config/opencode/plugins/harness-budget/test.js" "${home}/.config/harnesspro/pi-extension.test.mjs" "${home}/.config/harnesspro/launcher.test.mjs" "${home}/.config/harnesspro/orca-plugin.test.mjs" "${home}/.config/harnesspro/scripts/register.test.mjs`,
     `python3 -m unittest discover -s "${home}/.config/harnesspro" -p 'test_codex_hook.py' -v`,
   ].join(" && ");
   const child = spawn(command, { shell: true, stdio: "inherit", env: process.env });

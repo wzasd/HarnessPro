@@ -1,11 +1,11 @@
 {
   "name": "harnesspro-orca-plugin",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "description": "Orca plugin and shared budget adapters for OpenCode 2, Codex, and Pi.",
   "scripts": {
-    "test": "node --test core.test.mjs coordinator.test.mjs launcher.test.mjs orca-plugin.test.mjs pi-extension.test.mjs adapters/opencode/test.js scripts/register.test.mjs && python3 -m unittest discover -s . -p 'test_codex_hook.py' -v",
+    "test": "node --test core.test.mjs router.test.mjs evolution-core.test.mjs coordinator.test.mjs launcher.test.mjs orca-plugin.test.mjs pi-extension.test.mjs adapters/opencode/test.js scripts/register.test.mjs && python3 -m unittest discover -s . -p 'test_codex_hook.py' -v",
     "install:local": "sh scripts/install.sh"
   },
   "devDependencies": {

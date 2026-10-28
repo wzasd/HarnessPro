@@ -3,7 +3,7 @@
   <p><strong>Shared tool budgets for OpenCode 2, Codex, and Pi—with an Orca control panel.</strong></p>
 
   <p>
-    <a href="https://github.com/wzasd/HarnessPro/tree/v0.1.0"><img alt="Release" src="https://img.shields.io/badge/release-v0.1.0-blue" /></a>
+    <a href="https://github.com/wzasd/HarnessPro/tree/v0.2.0"><img alt="Release" src="https://img.shields.io/badge/release-v0.2.0-blue" /></a>
     <a href="https://github.com/wzasd/HarnessPro/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-green" /></a>
     <img alt="Orca" src="https://img.shields.io/badge/Orca-%3E%3D1.4.0-6f42c1" />
   </p>
@@ -24,10 +24,10 @@ This is a third-party engineering project inspired by the HarnessPro paper. It i
 | Component | What it does today | What it does not do yet |
 | --- | --- | --- |
 | Orca plugin | Start, inspect, and stop checks; show completion notifications | No stable-panel guarantee while the plugin API is experimental |
-| Shared policy | Lite, Medium, and Heavy tool budgets | No automatic profile selection |
-| OpenCode 2 adapter | Phase reminders, hard limits, repeated-log folding | No automatic model routing |
+| Shared policy | Lite, Medium, and Heavy tool budgets | Keyword-based auto routing with manual override |
+| OpenCode 2 adapter | Phase reminders, hard limits, repeated-log folding | Model mappings live in `policy.json` |
 | Codex adapter | Phase reminders, hard limits, parallel-call accounting | No log folding; Codex hooks cannot rewrite tool output |
-| Pi adapter | Phase reminders, hard limits, log folding, in-session profile switching | No automatic model routing |
+| Pi adapter | Phase reminders, hard limits, log folding, in-session profile switching | Model mappings live in `policy.json` |
 
 The short version: **less wandering, more finishing.**
 
@@ -92,6 +92,18 @@ Pi users can also switch during a session:
 
 No profile means no budget enforcement.
 
+### Automatic model routing
+
+Let the router classify the task and select both the model and the budget:
+
+```bash
+harnesspro auto --task "Fix a typo in the README" pi
+harnesspro auto --task "Add parser tests" codex
+harnesspro auto --task "Debug a production race condition" opencode2 --standalone
+```
+
+The current router uses deterministic keywords. Empty task descriptions default to Medium. It is a simple fallback, not a measured classifier; review routes on real tasks before relying on them.
+
 ## Run checks from Orca
 
 Use the panel buttons, or type:
@@ -108,6 +120,26 @@ Checks run in a separate process. Closing the panel does not stop them.
 ~/.local/state/harnesspro/checks.json
 ~/.local/state/harnesspro/checks.log
 ```
+
+## Multi-agent evolution
+
+Start a real Orca-coordinated evolution run:
+
+```bash
+harnesspro evolve start
+harnesspro evolve status
+harnesspro evolve stop
+```
+
+The coordinator uses four Orca workers: test synthesizer, trajectory analyzer, evolution planner, and harness editor. Candidates then run real Codex evaluations against fixed tests. The report includes pass rate, latency, and token cost, with no invented dollar estimate.
+
+When the status becomes `awaiting-approval`, review the report and apply a profile explicitly:
+
+```bash
+harnesspro evolve apply medium
+```
+
+Nothing replaces the shared policy until you run `apply`.
 
 ## How the pieces fit
 
@@ -163,7 +195,7 @@ The paper uses Lite, Medium, and Heavy for performance–cost operating points. 
 4. Install `harnesspro.orca` and review its capabilities.
 5. Enable the plugin.
 
-The marketplace index currently points to `v0.1.0`.
+The marketplace index currently points to `v0.2.0`.
 
 ## Updates
 
@@ -189,6 +221,9 @@ orca-marketplace.json  Marketplace index
 main.mjs               Orca worker
 panel.html             Orca panel
 coordinator.mjs        Independent check process
+router.mjs             Task classification and model routing
+evolution.mjs          Multi-agent evolution coordinator
+evolution-core.mjs     Candidate scoring and test isolation
 core.mjs               Shared OpenCode 2 and Pi logic
 policy.json            Shared budgets
 adapters/              OpenCode 2, Codex, and Pi adapters
@@ -211,14 +246,12 @@ The suite covers policy loading, parallel accounting, log folding, process lifec
 4. Commit and create a matching Git tag.
 5. Push the commit and tag.
 
-## Not in the box yet
+## Current limits
 
-- Automatic model and reasoning-effort routing.
-- Multi-agent trajectory analysis, planning, editing, and test synthesis.
-- Candidate evaluation with fixed task sets and cost-aware selection.
-- Automatic replacement of the active policy.
-
-Those features belong to the broader HarnessPro research direction. This repository currently provides the budget and orchestration foundation, not the complete self-evolution loop.
+- The router uses keywords, not a benchmarked task classifier.
+- Automatic policy replacement still requires explicit approval.
+- The included evolution tasks are a small smoke suite, not the paper's benchmarks.
+- The repository does not reproduce the paper's full training procedure or reported results.
 
 ## Translations
 

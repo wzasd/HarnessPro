@@ -6,7 +6,7 @@ export function getProfile(name, policyPath = process.env.HARNESSPRO_POLICY || p
   const policy = JSON.parse(fs.readFileSync(policyPath, "utf8"));
   const profile = policy.profiles[name];
   if (!profile) throw new Error(`Unknown HarnessPro profile: ${name}`);
-  return profile;
+  return { economy: profile.economy, converge: profile.converge, max: profile.max };
 }
 
 export function foldRepeatedLines(text) {

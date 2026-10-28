@@ -1,8 +1,35 @@
 {
   "version": 1,
   "profiles": {
-    "lite": { "economy": 8, "converge": 14, "max": 22 },
-    "medium": { "economy": 14, "converge": 26, "max": 44 },
-    "heavy": { "economy": 20, "converge": 36, "max": 60 }
+    "lite": {
+      "economy": 8,
+      "converge": 14,
+      "max": 22,
+      "route": {
+        "opencode2": { "model": "omniroute/ponyai/gpt-5.6-luna#low", "effort": "low" },
+        "codex": { "model": "gpt-5.6-luna", "effort": "low" },
+        "pi": { "model": "omniroute/ponyai/gpt-5.6-luna", "effort": "low" }
+      }
+    },
+    "medium": {
+      "economy": 14,
+      "converge": 26,
+      "max": 44,
+      "route": {
+        "opencode2": { "model": "omniroute/ponyai/gpt-6-luna#medium", "effort": "medium" },
+        "codex": { "model": "gpt-6-luna", "effort": "medium" },
+        "pi": { "model": "omniroute/ponyai/gpt-6-luna", "effort": "medium" }
+      }
+    },
+    "heavy": {
+      "economy": 20,
+      "converge": 36,
+      "max": 60,
+      "route": {
+        "opencode2": { "model": "omniroute/ponyai/claude-opus-5#high", "effort": "high" },
+        "codex": { "model": "gpt-6-luna", "effort": "high" },
+        "pi": { "model": "omniroute/ponyai/claude-opus-5", "effort": "high" }
+      }
+    }
   }
 }

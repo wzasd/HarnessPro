@@ -1,0 +1,10 @@
+{
+  "training": {
+    "id": "add",
+    "prompt": "Create add.py in the current directory. Define add(a, b) to return a + b. Keep the implementation minimal and do not create other files."
+  },
+  "validation": {
+    "id": "subtract",
+    "prompt": "Create subtract.py in the current directory. Define subtract(a, b) to return a - b. Keep the implementation minimal and do not create other files."
+  }
+}

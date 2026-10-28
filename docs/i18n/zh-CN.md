@@ -17,10 +17,10 @@ HarnessPro 给这 3 个 Agent 设置同一套预算。接近上限时，HarnessP
 | 组件 | 当前功能 | 当前边界 |
 | --- | --- | --- |
 | Orca 插件 | 运行检查、查看状态、停止检查、显示完成通知 | 插件 API 仍处于实验阶段 |
-| 共享策略 | Lite、Medium、Heavy 3 档工具预算 | 不会自动选择档位 |
-| OpenCode 2 适配器 | 阶段提醒、超限阻断、重复日志折叠 | 不支持自动模型路由 |
+| 共享策略 | Lite、Medium、Heavy 3 档工具预算 | 支持关键词自动路由，也可手动覆盖 |
+| OpenCode 2 适配器 | 阶段提醒、超限阻断、重复日志折叠 | 模型映射保存在 `policy.json` |
 | Codex 适配器 | 阶段提醒、超限阻断、并行调用计数 | 官方 Hook 不支持改写工具结果，不能折叠日志 |
-| Pi 适配器 | 阶段提醒、超限阻断、重复日志折叠、会话内切换 | 不支持自动模型路由 |
+| Pi 适配器 | 阶段提醒、超限阻断、重复日志折叠、会话内切换 | 模型映射保存在 `policy.json` |
 
 简单说：减少无效探索，及时完成任务。
 
@@ -85,6 +85,18 @@ Pi 会话内也可以切换：
 
 未选择档位时，预算限制默认关闭。
 
+### 自动模型路由
+
+让路由器根据任务描述选择模型和预算：
+
+```bash
+harnesspro auto --task "Fix a typo in the README" pi
+harnesspro auto --task "Add parser tests" codex
+harnesspro auto --task "Debug a production race condition" opencode2 --standalone
+```
+
+当前路由器使用确定性关键词。任务描述为空时默认使用 Medium。关键词路由只是备用方案，不是经过基准验证的分类器。依赖自动路由前，宜先检查真实任务的选择结果。
+
 ## 在 Orca 中运行检查
 
 使用面板按钮，或在终端执行：
@@ -101,6 +113,26 @@ harnesspro checks stop
 ~/.local/state/harnesspro/checks.json
 ~/.local/state/harnesspro/checks.log
 ```
+
+## 多 Agent 进化
+
+启动由 Orca 协调的真实进化任务：
+
+```bash
+harnesspro evolve start
+harnesspro evolve status
+harnesspro evolve stop
+```
+
+协调器使用测试合成、轨迹分析、进化规划、Harness 编辑 4 个 Orca worker。候选随后运行真实 Codex 验证，并使用同一组固定测试。报告包含通过率、耗时和 Token 成本，不虚构美元估算。
+
+状态变为 `awaiting-approval` 后，审核报告并显式选择档位：
+
+```bash
+harnesspro evolve apply medium
+```
+
+只有执行 `apply` 才会替换共享策略。
 
 ## 工作方式
 
@@ -156,7 +188,7 @@ flowchart LR
 4. 安装 `harnesspro.orca` 并查看权限说明。
 5. 启用插件。
 
-Marketplace 当前指向 `v0.1.0`。
+Marketplace 当前指向 `v0.2.0`。
 
 ## 更新
 
@@ -182,6 +214,9 @@ orca-marketplace.json  Marketplace 索引
 main.mjs               Orca worker
 panel.html             Orca 面板
 coordinator.mjs        独立检查进程
+router.mjs             任务分类和模型路由
+evolution.mjs          多 Agent 进化协调器
+evolution-core.mjs     候选评分和测试隔离
 core.mjs               OpenCode 2 和 Pi 共用逻辑
 policy.json            共享预算
 adapters/              OpenCode 2、Codex、Pi 适配器
@@ -204,14 +239,12 @@ npm test
 4. 提交变更并创建同名 Git 标签。
 5. 将提交和标签推送到 GitHub。
 
-## 尚未提供的功能
+## 当前限制
 
-- 自动选择模型和推理级别。
-- 多 Agent 轨迹分析、规划、编辑和测试合成。
-- 使用固定任务集和成本数据选择候选策略。
-- 自动替换当前策略。
-
-这些功能属于 HarnessPro 的研究方向。本仓库目前提供预算和协调基础，不包含完整的自进化流程。
+- 路由器使用关键词，不是经过基准验证的分类器。
+- 替换当前策略仍需要人工确认。
+- 内置进化任务只是小型冒烟测试，不是论文基准。
+- 本仓库没有复现论文的完整训练过程和报告结果。
 
 ## 其他语言
 

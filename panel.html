@@ -18,6 +18,9 @@
     <button id="run">运行检查</button>
     <button id="status">查看状态</button>
     <button id="stop">停止检查</button>
+    <button id="evolve">开始进化</button>
+    <button id="evolve-status">进化状态</button>
+    <button id="apply-evolution">采用均衡</button>
     <p id="status-text">正在读取终端…</p>
     <script>
       'use strict'
@@ -74,6 +77,9 @@
       document.getElementById('run').addEventListener('click', function () { send('harnesspro checks start') })
       document.getElementById('status').addEventListener('click', function () { send('harnesspro checks status') })
       document.getElementById('stop').addEventListener('click', function () { send('harnesspro checks stop') })
+      document.getElementById('evolve').addEventListener('click', function () { send('harnesspro evolve start') })
+      document.getElementById('evolve-status').addEventListener('click', function () { send('harnesspro evolve status') })
+      document.getElementById('apply-evolution').addEventListener('click', function () { send('harnesspro evolve apply medium') })
       refresh()
     </script>
   </body>

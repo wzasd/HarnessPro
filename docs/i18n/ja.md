@@ -17,10 +17,10 @@ HarnessPro は、3 つのエージェントに共通の予算を設定します�
 | コンポーネント | 現在の機能 | 現在の制約 |
 | --- | --- | --- |
 | Orca プラグイン | チェックの開始・状態表示・停止、完了通知 | プラグイン API は experimental です |
-| 共有ポリシー | Lite、Medium、Heavy の 3 段階のツール予算 | プロファイルの自動選択には対応していません |
-| OpenCode 2 アダプター | 段階通知、上限停止、重複ログの折りたたみ | 自動モデルルーティングには対応していません |
+| 共有ポリシー | Lite、Medium、Heavy の 3 段階のツール予算 | キーワード自動ルーティングと手動オーバーライド |
+| OpenCode 2 アダプター | 段階通知、上限停止、重複ログの折りたたみ | モデルマッピングは `policy.json` に保存 |
 | Codex アダプター | 段階通知、上限停止、並列呼び出しの集計 | Codex Hook はツール出力を書き換えられないため、ログの折りたたみはありません |
-| Pi アダプター | 段階通知、上限停止、ログの折りたたみ、セッション内の切り替え | 自動モデルルーティングには対応していません |
+| Pi アダプター | 段階通知、上限停止、ログの折りたたみ、セッション内の切り替え | モデルマッピングは `policy.json` に保存 |
 
 要するに、無駄な探索を減らし、完了まで進みやすくするプロジェクトです。
 
@@ -85,6 +85,18 @@ Pi ではセッション中にも切り替えられます。
 
 プロファイルを選択しない場合、予算制限は無効です。
 
+### 自動モデルルーティング
+
+タスクの説明からモデルと予算を自動選択します。
+
+```bash
+harnesspro auto --task "Fix a typo in the README" pi
+harnesspro auto --task "Add parser tests" codex
+harnesspro auto --task "Debug a production race condition" opencode2 --standalone
+```
+
+現在のルーターは決定論的なキーワードを使用します。タスクの説明が空の場合は Medium を選択します。ベンチマーク済みの分類器ではないため、実際のタスクでルートを確認してください。
+
 ## Orca からチェックを実行する
 
 パネルのボタン、または次のコマンドを使用します。
@@ -101,6 +113,26 @@ harnesspro checks stop
 ~/.local/state/harnesspro/checks.json
 ~/.local/state/harnesspro/checks.log
 ```
+
+## マルチエージェント進化
+
+Orca が調整する実際の進化ジョブを開始します。
+
+```bash
+harnesspro evolve start
+harnesspro evolve status
+harnesspro evolve stop
+```
+
+コーディネーターは、テスト合成、軌跡分析、進化計画、Harness 編集の 4 つの Orca worker を使用します。各候補は固定テスト付きの実際の Codex 評価も実行します。レポートには成功率、レイテンシ、トークンコストを含め、ドル推定は行いません。
+
+ステータスが `awaiting-approval` になったら、レポートを確認し、プロファイルを明示的に選択します。
+
+```bash
+harnesspro evolve apply medium
+```
+
+共有ポリシーは `apply` を実行するまで置き換えられません。
 
 ## 構成
 
@@ -156,7 +188,7 @@ flowchart LR
 4. `harnesspro.orca` をインストールし、権限を確認します。
 5. プラグインを有効にします。
 
-Marketplace インデックスは現在 `v0.1.0` を指しています。
+Marketplace インデックスは現在 `v0.2.0` を指しています。
 
 ## 更新
 
@@ -182,6 +214,9 @@ orca-marketplace.json  Marketplace インデックス
 main.mjs               Orca worker
 panel.html             Orca パネル
 coordinator.mjs        独立チェックプロセス
+router.mjs             タスク分類とモデルルーティング
+evolution.mjs          マルチエージェント進化コーディネーター
+evolution-core.mjs     候補スコアとテスト分離
 core.mjs               OpenCode 2 と Pi の共通ロジック
 policy.json            共有予算
 adapters/              OpenCode 2、Codex、Pi アダプター
@@ -204,14 +239,12 @@ npm test
 4. 変更をコミットし、同じ名前の Git タグを作成します。
 5. コミットとタグを GitHub に push します。
 
-## まだ含まれていない機能
+## 現在の制約
 
-- モデルと reasoning effort の自動ルーティング。
-- マルチエージェントによる軌跡分析、計画、編集、テスト合成。
-- 固定タスクセットとコストを使った候補評価。
-- 現在のポリシーの自動置き換え。
-
-これらは HarnessPro の研究方向に含まれる機能です。このリポジトリは、予算とオーケストレーションの基盤を提供するもので、完全な自己進化ループではありません。
+- ルーターはベンチマーク済みの分類器ではなく、キーワードを使用します。
+- ポリシーの置き換えには明示的な承認が必要です。
+- 付属の進化タスクは小さなスモークテストであり、論文のベンチマークではありません。
+- 論文の完全なトレーニング手順や報告結果を再現したものではありません。
 
 ## その他の言語
 
