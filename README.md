@@ -3,7 +3,7 @@
   <p><strong>Shared tool budgets for OpenCode 2, Codex, and Pi—with an Orca control panel.</strong></p>
 
   <p>
-    <a href="https://github.com/wzasd/HarnessPro/tree/v0.2.3"><img alt="Release" src="https://img.shields.io/badge/release-v0.2.3-blue" /></a>
+    <a href="https://github.com/wzasd/HarnessPro/tree/v0.3.0"><img alt="Release" src="https://img.shields.io/badge/release-v0.3.0-blue" /></a>
     <a href="https://github.com/wzasd/HarnessPro/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-green" /></a>
     <img alt="Orca" src="https://img.shields.io/badge/Orca-%3E%3D1.4.0-6f42c1" />
   </p>
@@ -106,7 +106,7 @@ The current router uses deterministic keywords. Empty task descriptions default 
 
 ## Run checks from Orca
 
-Use `Ctrl + Shift + L`, or type:
+Use the panel's **Run checks** button, or type:
 
 ```bash
 harnesspro checks start
@@ -133,7 +133,7 @@ harnesspro evolve stop
 
 The coordinator uses four Orca workers: test synthesizer, trajectory analyzer, evolution planner, and harness editor. Candidates then run real Codex evaluations against fixed tests. The report includes pass rate, latency, and token cost, with no invented dollar estimate.
 
-No terminal is required. Use `Ctrl + Shift + H` to start, `Ctrl + Shift + J` to inspect status, and `Ctrl + Shift + K` to stop. Use `Ctrl + Shift + A` to apply the Medium candidate. The panel shows these shortcuts.
+The panel provides **Start evolution**, **Evolution status**, **Stop evolution**, and **Apply medium** buttons. It automatically selects the newest available terminal. No keyboard shortcuts are required.
 
 When the status becomes `awaiting-approval`, review the report and apply a profile explicitly:
 
@@ -197,7 +197,7 @@ The paper uses Lite, Medium, and Heavy for performance–cost operating points. 
 4. Install `harnesspro.orca` and review its capabilities.
 5. Enable the plugin.
 
-The marketplace index currently points to `v0.2.3`.
+The marketplace index currently points to `v0.3.0`.
 
 ## Updates
 

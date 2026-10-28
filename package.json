@@ -1,6 +1,6 @@
 {
   "name": "harnesspro-orca-plugin",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "description": "Orca plugin and shared budget adapters for OpenCode 2, Codex, and Pi.",
