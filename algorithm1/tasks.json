@@ -1,0 +1,98 @@
+[
+  {
+    "id": "coupon-bundle-english-name-fallback",
+    "commit": "61d706a41f",
+    "parent": "88a50e0db9",
+    "prompt": "券包英文名缺失时回退到中文名。修改 webapps/benefit_service/internal/dao/coupon_bundle_to_pb.go，并补充或更新对应测试。",
+    "cwd": "common_go",
+    "officialTest": "CGO_ENABLED=1 go test -count=1 -parallel=1 -gcflags=all=-l ./webapps/benefit_service/internal/dao -run 'TestBuildCouponBundleBasePB'"
+  },
+  {
+    "id": "low-speed-fee-calculation",
+    "commit": "c00aee2639",
+    "parent": "ad85b55027",
+    "prompt": "修正连续低速时长和里程附加费计算。修改 utility/tnc_utils/price/price_calculator.go，并补充或更新对应测试。",
+    "cwd": "common_go",
+    "officialTest": "CGO_ENABLED=1 go test -count=1 -parallel=1 -gcflags=all=-l ./utility/tnc_utils/price -run 'TestCalcPriceDetailV[23]'"
+  },
+  {
+    "id": "invoice-chinese-length",
+    "commit": "ea2da54ded",
+    "parent": "310a3a6a39",
+    "prompt": "开票内容的中文长度按字符数而不是字节数计算。修改 webapps/project_gaode/internal/logic/invoice/create_invoice_validate.go，并补充或更新对应测试。",
+    "cwd": "common_go",
+    "officialTest": "CGO_ENABLED=1 go test -count=1 -parallel=1 -gcflags=all=-l ./webapps/project_gaode/internal/logic/invoice -run 'TestValidateCreateInvoice'"
+  },
+  {
+    "id": "estimate-unavailable-time",
+    "commit": "4c966c2bc1",
+    "parent": "a9f5058dbc",
+    "prompt": "估价时过滤站点不可用时段。修改 webapps/project_gaode/internal/logic/estimate/price.go，并补充或更新对应测试。",
+    "cwd": "common_go",
+    "officialTest": "CGO_ENABLED=1 go test -count=1 -parallel=1 -gcflags=all=-l ./webapps/project_gaode/internal/logic/estimate -run 'TestValidateUnavailableTime'"
+  },
+  {
+    "id": "walking-distance-truncation",
+    "commit": "cfa4cd52f4",
+    "parent": "b1b3bd91cf",
+    "prompt": "步行距离与直线距离比较统一使用米级截断。修改 webapps/project_gaode/internal/client/walking_route.go，并补充或更新对应测试。",
+    "cwd": "common_go",
+    "officialTest": "CGO_ENABLED=1 go test -count=1 -parallel=1 -gcflags=all=-l ./webapps/project_gaode/internal/client -run 'TestValidateWalkingDistanceAgainstLinear'"
+  },
+  {
+    "id": "coupon-failed-outcome",
+    "commit": "5510172dbe",
+    "parent": "44770d9926",
+    "prompt": "发券过期或超过限额时，结果应聚合为 FAILED。修改 webapps/fcc_backend/internal/logic/approval/execution_outcome.go，并补充或更新对应测试。",
+    "cwd": "common_go",
+    "officialTest": "CGO_ENABLED=1 go test -count=1 -parallel=1 -gcflags=all=-l ./webapps/fcc_backend/internal/logic/approval -run 'TestAggregateItemIssueOutcome'"
+  },
+  {
+    "id": "empty-arrival-time",
+    "commit": "447333f111",
+    "parent": "f2316c2268",
+    "prompt": "到达时间为空时避免上报过程崩溃。修改 robotaxi/fcc_backend/lib/data_finder_report_helper.py，并补充或更新对应测试。",
+    "cwd": "common/webapps/robotaxi/fcc_backend",
+    "officialTest": "poetry run pytest -q lib/data_finder_report_helper_test.py"
+  },
+  {
+    "id": "dynamic-tts-fallback",
+    "commit": "cd6b373c7f",
+    "parent": "d022178dcc",
+    "prompt": "动态 TTS 槽位保留纯文本，合成失败时回退到 SSML。修改 hmi_bot_service/server/endpoints/chat_service.py，并更新 text_to_speech_composite_test.py。",
+    "cwd": "common/webapps/hmi_bot_service",
+    "officialTest": "poetry run pytest -q server/endpoints/text_to_speech_composite_test.py"
+  },
+  {
+    "id": "station-change-coupon-recheck",
+    "commit": "fc3507a36a",
+    "parent": "747330fa7b",
+    "prompt": "修改站点后重新评估新满足使用门槛的券。修改 robotaxi/fcc_backend/models/billing_utils.py，并补充或更新对应测试。",
+    "cwd": "common/webapps/robotaxi/fcc_backend",
+    "officialTest": "poetry run pytest -q models/billing_utils_test.py"
+  },
+  {
+    "id": "exclude-deprecated-stations",
+    "commit": "d83a4c6dc7",
+    "parent": "cd8feeae0f",
+    "prompt": "站点搜索排除已废弃站点。修改 webapps/aoi_service/internal/logic/robotaxi_station/robotaxi_station_search.go，并补充或更新对应测试。",
+    "cwd": "common_go",
+    "officialTest": "CGO_ENABLED=1 go test -count=1 -parallel=1 -gcflags=all=-l ./webapps/aoi_service/internal/logic/robotaxi_station -run 'TestFilterStations'"
+  },
+  {
+    "id": "parking-time-format",
+    "commit": "867c8b5095",
+    "parent": "97ec5146bd",
+    "prompt": "停车相关时间统一使用秒级格式，并补齐等待时长验证。修改 webapps/aoi_service/internal/logic/robotaxi_station/update_utils.go 和 utility/station_checker.go，并补充或更新测试。",
+    "cwd": "common_go",
+    "officialTest": "CGO_ENABLED=1 go test -count=1 -parallel=1 -gcflags=all=-l ./webapps/aoi_service/internal/logic/robotaxi_station -run 'TestValidateStationTimeLimit'"
+  },
+  {
+    "id": "only-app-coupon-platform",
+    "commit": "5953af658a",
+    "parent": "8fb2f385e2",
+    "prompt": "区分 iOS 和 Android，支持 ONLY_APP 券的平台映射。修改 webapps/fcc_backend/internal/utils/coupon_platform.go 和 webapps/fcc_backend/internal/logic/user_coupon/query_user_coupons.go，并补充或更新对应测试。",
+    "cwd": "common_go",
+    "officialTest": "CGO_ENABLED=1 go test -count=1 -parallel=1 -gcflags=all=-l ./webapps/fcc_backend/internal/logic/user_coupon -run 'TestDefaultUsableClientsForPlatform|TestQueryUserCoupons'"
+  }
+]

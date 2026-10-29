@@ -29,9 +29,11 @@ test("launcher delegates check commands", () => {
 
 test("launcher starts and stops an evolution coordinator", () => {
   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "harnesspro-evolution-launcher-"));
-  const env = { ...process.env, HARNESSPRO_EVOLUTION_STATE_DIR: stateDir };
+  const env = { ...process.env, HARNESSPRO_ALGORITHM1_STATE_DIR: stateDir };
   const started = JSON.parse(execFileSync(launcher, ["evolve", "start"], { env, encoding: "utf8" }));
   assert.equal(started.status, "running");
+  const duplicate = JSON.parse(execFileSync(launcher, ["evolve", "start"], { env, encoding: "utf8" }));
+  assert.equal(duplicate.pid, started.pid);
   const stopped = JSON.parse(execFileSync(launcher, ["evolve", "stop"], { env, encoding: "utf8" }));
   assert.equal(stopped.status, "stopped");
 });

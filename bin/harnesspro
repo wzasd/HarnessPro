@@ -9,7 +9,7 @@ if [ "$1" = evolve ]; then
   shift
   action=$1
   shift
-  exec node "$project_root/evolution.mjs" "$action" "$@"
+  exec node "$project_root/algorithm1/algorithm1.mjs" "$action" "$@"
 fi
 if [ "$1" = auto ]; then
   shift
